@@ -8,8 +8,14 @@ module.exports = {
         hot: true,
         inline: true,
         progress: true,
-        contentBase: ".", //最好写上，否则报错，难道这里是一个坑？
-        port: 8080
+        contentBase: '.', //最好写上，否则报错，难道这里是一个坑？
+        port: 8080,
+        proxy: {
+            '/api/*': {
+                target: 'http://127.0.0.1:8000',
+                secure: false
+            }
+        }
     },
 
     entry: [

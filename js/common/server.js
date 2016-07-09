@@ -3,7 +3,7 @@
 import 'whatwg-fetch';
 
 export function fetchFromServer(url, method, params, success, failed) {
-    console.log(url, method, params)
+    console.log('method: ', method, 'url: ', url);
     fetch(url, {
         method: method,
         headers: {

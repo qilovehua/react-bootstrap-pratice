@@ -4,33 +4,85 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Router, Route, IndexRoute, browserHistory, Link} from 'react-router'
 
-import {Nav, Navbar, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
+import {Nav, Navbar, NavItem, MenuItem, NavDropdown, Modal, Button, Form, FormGroup, FormControl, Col, ControlLabel, Glyphicon} from 'react-bootstrap';
+
+import _ from 'lodash';
 
 import {login} from './api/password';
+import cookie from 'react-cookie';
 
 import Hello from './hello';
 import World from './world';
-import TopicList from './topic/list';
+import TopicList from './component/topic/list';
 
 const App = React.createClass({
 
     getInitialState(){
-        console.log('login getInitialState');
         return {
-            name: ''
+            username: '',
+            password: '',
+            token: '',
+            show: false, // 登陆框显示与否
         }
     },
 
     componentWillMount(){
-        this.login();
+        this.getUserInfo();
+    },
+
+    getUserInfo(){
+        var username = cookie.load('username');
+        var token = cookie.load('token');
+        var params = {};
+        username && (params.username = username);
+        username && token && (params.token = token);
+        _.size(params) && this.setState(params);
     },
 
     login(){
-        login({name: 'hello', password: '123456'}, (result)=>{
+        var {username, password} = this.state;
+        if(!username || !password){
+            return;
+        }
+        login({name: username, password}, (result)=> {
             console.log('login', result);
-        }, (err)=>{
+            this.setState({
+                token: result.token,
+                show: false
+            });
+            cookie.save('token', result.token);
+            cookie.save('username', username);
+        }, (err)=> {
             console.log('error: ', err);
         })
+    },
+
+    logout(){
+        cookie.remove('token');
+        this.setState({
+            token: '',
+            password: ''
+        });
+    },
+
+    modalShow(show){
+        this.setState({
+            show
+        });
+    },
+
+    handleUser(e){
+        var username = e.target.value;
+        this.setState({
+            username
+        });
+    },
+
+    handlePass(e){
+        var password = e.target.value;
+        this.setState({
+            password
+        });
     },
 
     render(){
@@ -57,14 +109,14 @@ const App = React.createClass({
                             // </NavDropdown>
                         </Nav>
                         {
-                            this.state.name?(
+                            this.state.token ? (
                                 <Nav pullRight>
-                                    <span>{this.state.name}</span>
-                                    <NavItem eventKey={2} href="#">Logout</NavItem>
+                                    <NavItem><Glyphicon glyph="user"/> {this.state.username}</NavItem>
+                                    <NavItem eventKey={2} href="#" onClick={this.logout}>Logout</NavItem>
                                 </Nav>
                             ):(
                                 <Nav pullRight>
-                                    <NavItem eventKey={1} href="#">Login</NavItem>
+                                    <NavItem eventKey={1} onClick={()=>this.modalShow(true)}>Login</NavItem>
                                 </Nav>
                             )
                         }
@@ -73,6 +125,54 @@ const App = React.createClass({
                 <div>
                     {this.props.children}
                 </div>
+
+                <Modal show={this.state.show} onHide={()=>{this.modalShow(false)}}>
+                    <Modal.Header>
+                        <Modal.Title>Welcome, please login...</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <Form horizontal style={{margin: '0 auto'}}>
+                            <FormGroup controlId="formHorizontalEmail">
+                                <Col componentClass={ControlLabel} md={2} mdOffset={2}>
+                                    Username
+                                </Col>
+                                <Col md={5}>
+                                    <FormControl placeholder="Username" value={this.state.username} onChange={this.handleUser}/>
+                                </Col>
+                            </FormGroup>
+
+                            <FormGroup controlId="formHorizontalPassword">
+                                <Col componentClass={ControlLabel} md={2} mdOffset={2}>
+                                    Password
+                                </Col>
+                                <Col md={5}>
+                                    <FormControl type="password" placeholder="Password" value={this.state.password} onChange={this.handlePass}/>
+                                </Col>
+                            </FormGroup>
+
+                            {/*<FormGroup>
+                                <Col smOffset={2} sm={10}>
+                                    <Checkbox>Remember me</Checkbox>
+                                </Col>
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Col smOffset={2} sm={10}>
+                                    <Button type="submit">
+                                        Sign in
+                                    </Button>
+                                </Col>
+                            </FormGroup>
+                            */}
+                        </Form>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button onClick={()=>{this.modalShow(false)}}>Cancel</Button>
+                        <Button bsStyle="primary" onClick={this.login}>Login</Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         );
     }

@@ -1,34 +1,28 @@
 'use strict';
 
 import React from 'react'
-import {Router, Route, IndexRoute, browserHistory, Link} from 'react-router'
+import cookie from 'react-cookie';
 
-import {Nav, Navbar, NavItem, MenuItem, NavDropdown} from 'react-bootstrap';
-
-const App = React.createClass({
-
-    getInitialState(){
-        return {
-            name: ''
-        }
-    },
-
-    componentWillMount(){
-        this.login();
-    },
-
-    login(){
-        login({name: 'hello', password: '123456'}, (result)=> {
-            console.log('login', result);
-        }, (err)=> {
-            console.log('error: ', err);
-        })
-    },
+const Login = React.createClass({
 
     render(){
+        var msg = '';
+        var username = cookie.load('username');
+        var token = cookie.load('token');
+        if(username){
+            msg += 'Welcome ' + username + ', ';
+        }
+        if (token){
+            msg += 'you has login ...';
+        }else{
+            msg += 'please login first ...';
+        }
         return (
             <div>
+                {msg}
             </div>
         )
     }
 });
+
+export default Login;

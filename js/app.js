@@ -8,10 +8,10 @@ import {Nav, Navbar, NavItem, MenuItem, NavDropdown, Modal, Button, Form, FormGr
 
 import _ from 'lodash';
 
-import {login} from './api/password';
+import {login, logout} from './api/password';
 import cookie from 'react-cookie';
 
-import Hello from './hello';
+import Login from './component/login';
 import World from './world';
 import TopicList from './component/topic/list';
 
@@ -46,12 +46,12 @@ const App = React.createClass({
         }
         login({name: username, password}, (result)=> {
             console.log('login', result);
+            cookie.save('token', result.token);
+            cookie.save('username', username);
             this.setState({
                 token: result.token,
                 show: false
             });
-            cookie.save('token', result.token);
-            cookie.save('username', username);
         }, (err)=> {
             console.log('error: ', err);
         })
@@ -59,6 +59,7 @@ const App = React.createClass({
 
     logout(){
         cookie.remove('token');
+        logout({});
         this.setState({
             token: '',
             password: ''
@@ -97,16 +98,7 @@ const App = React.createClass({
                     </Navbar.Header>
                     <Navbar.Collapse>
                         <Nav>
-                            <NavItem eventKey={1} href="/hello">Link</NavItem>
-                            <NavItem eventKey={2} href="/world">Link</NavItem>
-                            <NavItem eventKey={3} href="/topic">Topic</NavItem>
-                            // <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                            //     <MenuItem eventKey={3.1}>Action</MenuItem>
-                            //     <MenuItem eventKey={3.2}>Another action</MenuItem>
-                            //     <MenuItem eventKey={3.3}>Something else here</MenuItem>
-                            //     <MenuItem divider />
-                            //     <MenuItem eventKey={3.3}>Separated link</MenuItem>
-                            // </NavDropdown>
+                            <NavItem eventKey={1}><Link to="/topic">Topic</Link></NavItem>
                         </Nav>
                         {
                             this.state.token ? (
@@ -122,7 +114,7 @@ const App = React.createClass({
                         }
                     </Navbar.Collapse>
                 </Navbar>
-                <div>
+                <div style={{margin: '50px 100px 0 100px'}}>
                     {this.props.children}
                 </div>
 
@@ -182,12 +174,10 @@ const App = React.createClass({
 ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={App}>
-            <IndexRoute component={Hello}/>
-            <Route path="hello" component={Hello}/>
-            <Route path="world" component={World}/>
-            <Route path="topic" component={TopicList}>
-                <Route path="detail" component={World}/>
-            </Route>
+            <IndexRoute component={Login}/>
+            <Route path="login" component={Login}/>
+            <Route path="topic" component={TopicList}/>
+            <Route path="detail" component={World}/>
         </Route>
     </Router>
 ), document.getElementById('react'));

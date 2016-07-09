@@ -6,15 +6,27 @@ import {Well, Media, Label} from 'react-bootstrap';
 import {Link} from 'react-router';
 
 var Cell = React.createClass({
+
+    getDefaultProps(){
+        return {
+            fromList: true
+        }
+    },
+
     render() {
-        console.log('hahah');
         var {detail} = this.props;
-        console.log('DETAIL', detail);
         var tagList = (
             _.map(detail.tags, function (tag) {
                 return <Label bsStyle="info" style={{marginRight: '5px'}}>{tag}</Label>
             })
         );
+        if(!this.props.fromList){
+            var commentList = (
+                _.map(detail.comments, function (comment, index) {
+                    return <p>{index + ', '}{comment.content}</p>
+                })
+            );
+        }
         return (
             <div>
                 <Well>
@@ -26,7 +38,7 @@ var Cell = React.createClass({
                             <Media.Body>
                                 <Media.Heading><Link to={"/topic/item/"+detail._id}>{detail.title}</Link></Media.Heading>
                                 <p>{detail.content}</p>
-                                <p>{detail.createdAt}</p>
+                                <h6>{detail.createdAt} {detail.comments ? ('---'+ detail.comments.length + ' 评论'): undefined}</h6>
                                 <br/>
                                 <div>
                                 {tagList}
@@ -34,6 +46,15 @@ var Cell = React.createClass({
                             </Media.Body>
                         </Media.ListItem>
                     </Media.List>
+                    {
+                        !this.props.fromList ?
+                        <div>
+                            <hr style={{height: '3px', color: 'red'}}/>
+                            <div>
+                                {commentList.length > 0 ? commentList : <p>暂无评论！</p>}
+                            </div>
+                        </div> : undefined
+                    }
                 </Well>
             </div>
         )

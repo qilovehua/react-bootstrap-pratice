@@ -1,15 +1,36 @@
 import React from 'react';
 
 import _ from 'lodash';
+import {getTopicDetail} from '../../api/topic';
 
-import {Well, Media, Label} from 'react-bootstrap';
-import {Link} from 'react-router';
+import Cell from './cell';
 
 var Detail = React.createClass({
+
+    topicId: 0,
+    getInitialState(){
+        this.topicId = this.props.params.topicId;
+        return {
+            detail: undefined
+        }
+    },
+
+    componentWillMount(){
+        getTopicDetail(this.topicId, (result)=>{
+            console.log('detail topic', result);
+            this.setState({
+                detail: result.topic
+            });
+        });
+    },
+    
     render() {
         return (
             <div>
-               <p>Topicdetail</p>
+                <p>Topicdetail</p>
+                {
+                    this.state.detail ? <Cell detail={this.state.detail} fromList={false}/> : undefined
+                }
             </div>
         )
     }

@@ -14,6 +14,7 @@ import cookie from 'react-cookie';
 import Login from './component/login';
 import World from './world';
 import TopicList from './component/topic/list';
+import TopicDetail from './component/topic/detail';
 
 const App = React.createClass({
 
@@ -177,7 +178,7 @@ ReactDOM.render((
             <IndexRoute component={Login}/>
             <Route path="login" component={Login}/>
             <Route path="topic" component={TopicList}/>
-            <Route path="detail" component={World}/>
+            <Route path="topic/item/:topicId" component={TopicDetail}/>
         </Route>
     </Router>
 ), document.getElementById('react'));

@@ -18,7 +18,6 @@ var TopicList = React.createClass({
     componentWillMount(){
         console.log('topic list componentWillMount');
         getTopicList({}, (result)=>{
-            console.log('hahha', result);
             this.setState({
                 topicList: result.list
             });
@@ -26,7 +25,6 @@ var TopicList = React.createClass({
     },
 
     render(){
-        console.log('hello render');
         var list = _.map(this.state.topicList, function (topic, index) {
             return (
                 <Cell detail={topic} key={index}/>
@@ -35,7 +33,7 @@ var TopicList = React.createClass({
         return (
             <div>
                 <h3>TopicList</h3>
-                {list}
+                {list.length > 0 ? list:<p>暂无数据</p>}
             </div>
         );
     }

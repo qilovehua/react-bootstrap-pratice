@@ -13,6 +13,8 @@ module.exports = {
     },
 
     entry: [
+        "webpack-dev-server/client?http://0.0.0.0:8080",
+        "webpack/hot/only-dev-server",
       "./js/app.js"
     ],
 
@@ -24,12 +26,15 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.js?$/, loaders: ['react-hot', 'babel'], exclude: /node_modules/ },
-            { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+            // { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
             { test: /\.css$/, loader: "style!css" },
             {test: /\.less/,loader: 'style-loader!css-loader!less-loader'}
         ]
     },
     resolve:{
         extensions:['','.js','.json']
-    }
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ]
 };

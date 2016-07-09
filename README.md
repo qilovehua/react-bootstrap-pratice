@@ -1,3 +1,3 @@
-# react-demo
+# react-practice
 
-ES6, React, webpack, react-router
+ES6, React, webpack, react-router, react-bootstrap

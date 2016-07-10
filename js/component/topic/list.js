@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import Cell from './cell';
 
-import {getTopicList} from '../../api/topic';
+import {getTopicList, deleteTopic} from '../../api/topic';
 
 var TopicList = React.createClass({
 
@@ -24,10 +24,26 @@ var TopicList = React.createClass({
         });
     },
 
+    deleteTopicFun(topicId){
+        deleteTopic(topicId, ()=>{
+            var {topicList} = this.state;
+            console.log('before ', topicList);
+
+            _.remove(topicList, function (topic) {
+                return topic._id == topicId;
+            });
+            console.log('after ', topicList);
+            this.setState({
+                topicList
+            });
+        });
+    },
+
     render(){
+        var that = this;
         var list = _.map(this.state.topicList, function (topic, index) {
             return (
-                <Cell detail={topic} key={index}/>
+                <Cell detail={topic} key={index} deleteTopic={(id)=>that.deleteTopicFun(id)}/>
             )
         });
         return (

@@ -6,7 +6,7 @@ import _ from 'lodash';
 export function fetchFromServer(url, method, params, success, failed) {
     console.log('method: ', method, 'url: ', url);
     var myRequest = {};
-    if (method == 'POST'){
+    if (method == 'POST' || method == 'DELETE'){
         myRequest = {
             method: method,
             headers: {

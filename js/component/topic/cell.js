@@ -2,7 +2,7 @@ import React from 'react';
 
 import _ from 'lodash';
 
-import {Well, Media, Label} from 'react-bootstrap';
+import {Well, Media, Label, Row, Col, Button, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
 
 var Cell = React.createClass({
@@ -23,7 +23,7 @@ var Cell = React.createClass({
         if(!this.props.fromList){
             var commentList = (
                 _.map(detail.comments, function (comment, index) {
-                    return <p>{index + ', '}{comment.content}</p>
+                    return <p key={index}>{index + ', '}{comment.content}</p>
                 })
             );
         }
@@ -36,7 +36,12 @@ var Cell = React.createClass({
                                 <img width={64} height={64} src="/static/image/react.jpg" alt="react"/>
                             </Media.Left>
                             <Media.Body>
-                                <Media.Heading><Link to={"/topic/item/"+detail._id}>{detail.title}</Link></Media.Heading>
+                                <Media.Heading>
+                                    <Row>
+                                        <Col md={6}><Link to={"/topic/item/"+detail._id}>{detail.title}</Link></Col>
+                                        <Col md={1} xsOffset={5}><Button bsStyle="link" onClick={()=>this.props.deleteTopic(detail._id)}><Glyphicon glyph="remove"/></Button></Col>
+                                    </Row>
+                                </Media.Heading>
                                 <p>{detail.content}</p>
                                 <h6>{detail.createdAt} {detail.comments ? ('---'+ detail.comments.length + ' 评论'): undefined}</h6>
                                 <br/>

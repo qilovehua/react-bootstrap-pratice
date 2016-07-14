@@ -16,7 +16,7 @@ var Detail = React.createClass({
     },
 
     componentWillMount(){
-        getTopicDetail(this.topicId, (result)=>{
+        this.topicId && getTopicDetail(this.topicId, (result)=>{
             console.log('detail topic', result);
             this.setState({
                 detail: result.topic

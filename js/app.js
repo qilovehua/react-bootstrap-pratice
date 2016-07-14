@@ -1,8 +1,7 @@
 /*Hello World!*/
 
 import React from 'react'
-import ReactDOM from 'react-dom'
-import {Router, Route, IndexRoute, browserHistory, Link} from 'react-router'
+import {Link, History} from 'react-router'
 
 import {Nav, Navbar, NavItem, MenuItem, NavDropdown, Modal, Button, Form, FormGroup, FormControl, Col, ControlLabel, Glyphicon} from 'react-bootstrap';
 
@@ -11,12 +10,9 @@ import _ from 'lodash';
 import {login, logout} from './api/password';
 import cookie from 'react-cookie';
 
-import Login from './component/login';
-import World from './world';
-import TopicList from './component/topic/list';
-import TopicDetail from './component/topic/detail';
-
 const App = React.createClass({
+
+    mixins: [History],
 
     getInitialState(){
         return {
@@ -52,6 +48,8 @@ const App = React.createClass({
             this.setState({
                 token: result.token,
                 show: false
+            }, ()=>{
+                this.history.push('/');
             });
         }, (err)=> {
             console.log('error: ', err);
@@ -64,6 +62,8 @@ const App = React.createClass({
         this.setState({
             token: '',
             password: ''
+        }, ()=>{
+            this.history.push('/');
         });
     },
 
@@ -99,7 +99,7 @@ const App = React.createClass({
                     </Navbar.Header>
                     <Navbar.Collapse>
                         <Nav>
-                            <NavItem eventKey={1}><Link to="/topic">Topic</Link></NavItem>
+                            <NavItem eventKey={1}><Link to="/topic" style={{color: '#fff'}}>Topic</Link></NavItem>
                         </Nav>
                         {
                             this.state.token ? (
@@ -171,15 +171,6 @@ const App = React.createClass({
     }
 });
 
-// 配置路由，并将路由注入到id为react的DOM元素中
-ReactDOM.render((
-    <Router history={browserHistory}>
-        <Route path="/" component={App}>
-            <IndexRoute component={Login}/>
-            <Route path="login" component={Login}/>
-            <Route path="topic" component={TopicList}/>
-            <Route path="topic/item/:topicId" component={TopicDetail}/>
-        </Route>
-    </Router>
-), document.getElementById('react'));
+export default App;
+
 

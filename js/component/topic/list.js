@@ -6,6 +6,9 @@ import Cell from './cell';
 
 import {getTopicList, deleteTopic} from '../../api/topic';
 
+import  {Link} from 'react-router';
+import {Button} from 'react-bootstrap/lib/';
+
 var TopicList = React.createClass({
 
     getInitialState(){
@@ -48,7 +51,7 @@ var TopicList = React.createClass({
         });
         return (
             <div>
-                <h3>TopicList</h3>
+                <h3>TopicList <Link to="topic/new"><Button bsStyle="primary">新建帖子</Button></Link></h3>
                 {list.length > 0 ? list:<p>暂无数据</p>}
             </div>
         );

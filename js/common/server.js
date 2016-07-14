@@ -26,6 +26,9 @@ export function fetchFromServer(url, method, params, success, failed) {
             myRequest.url += '?' + query.join('&');
         }
     }
+    myRequest.mode = 'cors';
+    myRequest.cache = 'default';
+    myRequest.credentials = 'include'; //跨域需要携带cookie
     fetch(url, myRequest).then(function (res) {
         return res.json();
     }).then(function(result){

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import _ from 'lodash';
-import {getTopicDetail, newTopic} from '../../api/topic';
+import topic from '../../api/topic';
 
 import {Button, Form, FormGroup, FormControl, Col, ControlLabel} from 'react-bootstrap/lib';
 
@@ -9,7 +9,7 @@ var New = React.createClass({
 
     topicId: 0,
     getInitialState(){
-        // this.topicId = this.props.params.topicId;
+        this.topicId = this.props.params.topicId;
         return {
             title: '',
             content: '',
@@ -18,12 +18,15 @@ var New = React.createClass({
     },
 
     componentWillMount(){
-        // getTopicDetail(this.topicId, (result)=>{
-        //     console.log('detail topic', result);
-        //     this.setState({
-        //         detail: result.topic
-        //     });
-        // });
+        topic.getTopicDetail(this.topicId, (result)=>{
+            console.log('detail topic', result);
+            var topic = result.topic;
+            topic && this.setState({
+                title: topic.title,
+                content: topic.content,
+                tags: topic.tags.join(',')
+            });
+        });
     },
 
     handleInput(e, name){
@@ -39,10 +42,17 @@ var New = React.createClass({
             alert('title and content can not be empty');
             return;
         }
-        newTopic({title, content, tags}, (topicId)=>{
-            location = `/topic/item/${topicId}`;
-        }, ()=>{
-        })
+        if(this.topicId){
+            topic.editTopic(this.topicId, {title, content, tags}, (topicId)=> {
+                location = `/topic/item/${topicId}`;
+            }, ()=> {
+            })
+        }else {
+            topic.newTopic({title, content, tags}, (topicId)=> {
+                location = `/topic/item/${topicId}`;
+            }, ()=> {
+            })
+        }
     },
 
     render() {

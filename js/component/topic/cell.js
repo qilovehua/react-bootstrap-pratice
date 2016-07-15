@@ -1,6 +1,7 @@
 import React from 'react';
 
 import _ from 'lodash';
+import cookie from '../../common/cookie'
 
 import {Well, Media, Label, Row, Col, Button, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
@@ -15,6 +16,7 @@ var Cell = React.createClass({
 
     render() {
         var {detail} = this.props;
+        console.log('detail ', detail);
         var tagList = (
             _.map(detail.tags, function (tag) {
                 return <Label bsStyle="info" style={{marginRight: '5px'}}>{tag}</Label>
@@ -27,6 +29,7 @@ var Cell = React.createClass({
                 })
             );
         }
+        var isSelf = cookie.get('id') == detail.authorId;
         return (
             <div>
                 <Well>
@@ -39,7 +42,16 @@ var Cell = React.createClass({
                                 <Media.Heading>
                                     <Row>
                                         <Col md={6}><Link to={"/topic/item/"+detail._id}>{detail.title}</Link></Col>
-                                        <Col md={1} xsOffset={5}><Button bsStyle="link" onClick={()=>this.props.deleteTopic(detail._id)}><Glyphicon glyph="remove"/></Button></Col>
+                                        {
+                                            isSelf ?
+                                                <Col md={1} xsOffset={5}>
+                                                    <Link to={"/topic/new/"+detail._id}><Button
+                                                        bsStyle="link"><Glyphicon glyph="edit"/></Button></Link>
+                                                    <Button bsStyle="link"
+                                                            onClick={()=>this.props.deleteTopic(detail._id)}><Glyphicon
+                                                        glyph="remove"/></Button>
+                                                </Col> : undefined
+                                        }
                                     </Row>
                                 </Media.Heading>
                                 <p>{detail.content}</p>

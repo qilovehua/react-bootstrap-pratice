@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import Cell from './cell';
 
-import {getTopicList, deleteTopic} from '../../api/topic';
+import topic from '../../api/topic';
 
 import  {Link} from 'react-router';
 import {Button} from 'react-bootstrap/lib/';
@@ -20,7 +20,7 @@ var TopicList = React.createClass({
 
     componentWillMount(){
         console.log('topic list componentWillMount');
-        getTopicList({}, (result)=>{
+        topic.getTopicList({}, (result)=>{
             this.setState({
                 topicList: result.list
             });
@@ -28,7 +28,7 @@ var TopicList = React.createClass({
     },
 
     deleteTopicFun(topicId){
-        deleteTopic(topicId, ()=>{
+        topic.deleteTopic(topicId, ()=>{
             var {topicList} = this.state;
             console.log('before ', topicList);
 

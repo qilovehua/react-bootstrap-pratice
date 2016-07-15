@@ -1,7 +1,6 @@
 import React from 'react';
 
-import _ from 'lodash';
-import {getTopicDetail} from '../../api/topic';
+import topic from '../../api/topic';
 
 import Cell from './cell';
 
@@ -16,7 +15,7 @@ var Detail = React.createClass({
     },
 
     componentWillMount(){
-        this.topicId && getTopicDetail(this.topicId, (result)=>{
+        this.topicId && topic.getTopicDetail(this.topicId, (result)=>{
             console.log('detail topic', result);
             this.setState({
                 detail: result.topic

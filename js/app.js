@@ -45,6 +45,7 @@ const App = React.createClass({
             console.log('login', result);
             cookie.save('token', result.token);
             cookie.save('username', username);
+            cookie.save('id', result.id);
             this.setState({
                 token: result.token,
                 show: false

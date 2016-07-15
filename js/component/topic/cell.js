@@ -2,6 +2,9 @@ import React from 'react';
 
 import _ from 'lodash';
 import cookie from '../../common/cookie'
+import {browserHistory} from 'react-router';
+
+import topic from '../../api/topic';
 
 import {Well, Media, Label, Row, Col, Button, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
@@ -47,8 +50,11 @@ var Cell = React.createClass({
                                                 <Col md={1} xsOffset={5}>
                                                     <Link to={"/topic/new/"+detail._id}><Button
                                                         bsStyle="link"><Glyphicon glyph="edit"/></Button></Link>
-                                                    <Button bsStyle="link"
-                                                            onClick={()=>this.props.deleteTopic(detail._id)}><Glyphicon
+                                                    <Button bsStyle="link" onClick={()=>{
+                                                                topic.deleteTopic(detail._id, ()=> {
+                                                                    browserHistory.push('/topic');
+                                                                });
+                                                            }}><Glyphicon
                                                         glyph="remove"/></Button>
                                                 </Col> : undefined
                                         }

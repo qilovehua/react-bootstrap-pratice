@@ -20,7 +20,7 @@ var TopicList = React.createClass({
 
     componentWillMount(){
         console.log('topic list componentWillMount');
-        topic.getTopicList({}, (result)=>{
+        topic.getTopicList({}, (result)=> {
             this.setState({
                 topicList: result.list
             });
@@ -28,7 +28,7 @@ var TopicList = React.createClass({
     },
 
     deleteTopicFun(topicId){
-        topic.deleteTopic(topicId, ()=>{
+        topic.deleteTopic(topicId, ()=> {
             var {topicList} = this.state;
             console.log('before ', topicList);
 
@@ -52,7 +52,7 @@ var TopicList = React.createClass({
         return (
             <div>
                 <h3>TopicList <Link to="topic/new"><Button bsStyle="primary">新建帖子</Button></Link></h3>
-                {list.length > 0 ? list:<p>暂无数据</p>}
+                {list.length > 0 ? list : <p>暂无数据</p>}
             </div>
         );
     }

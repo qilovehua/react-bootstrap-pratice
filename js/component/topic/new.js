@@ -1,6 +1,6 @@
 import React from 'react';
 
-import _ from 'lodash';
+import {browserHistory} from 'react-router';
 import topic from '../../api/topic';
 
 import {Button, Form, FormGroup, FormControl, Col, ControlLabel} from 'react-bootstrap/lib';
@@ -10,6 +10,7 @@ var New = React.createClass({
     topicId: 0,
     getInitialState(){
         this.topicId = this.props.params.topicId;
+        console.log(this.topicId, '====');
         return {
             title: '',
             content: '',
@@ -18,7 +19,7 @@ var New = React.createClass({
     },
 
     componentWillMount(){
-        topic.getTopicDetail(this.topicId, (result)=>{
+        this.topicId && topic.getTopicDetail(this.topicId, (result)=>{
             console.log('detail topic', result);
             var topic = result.topic;
             topic && this.setState({
@@ -32,7 +33,6 @@ var New = React.createClass({
     handleInput(e, name){
         let param = {};
         param[name] = e.target.value;
-        console.log(param);
         this.setState(param);
     },
     
@@ -44,12 +44,12 @@ var New = React.createClass({
         }
         if(this.topicId){
             topic.editTopic(this.topicId, {title, content, tags}, (topicId)=> {
-                location = `/topic/item/${topicId}`;
+                browserHistory.push(`/topic/item/${topicId}`);
             }, ()=> {
             })
         }else {
             topic.newTopic({title, content, tags}, (topicId)=> {
-                location = `/topic/item/${topicId}`;
+                browserHistory.push(`/topic/item/${topicId}`);
             }, ()=> {
             })
         }

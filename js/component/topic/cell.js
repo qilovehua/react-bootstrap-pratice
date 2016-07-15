@@ -3,6 +3,7 @@ import React from 'react';
 import _ from 'lodash';
 import cookie from '../../common/cookie'
 import {browserHistory} from 'react-router';
+import {renderMarkdown} from './../../common/utils';
 
 import topic from '../../api/topic';
 
@@ -60,7 +61,10 @@ var Cell = React.createClass({
                                         }
                                     </Row>
                                 </Media.Heading>
-                                <p>{detail.content}</p>
+                                {
+                                    !this.props.fromList &&
+                                        <p dangerouslySetInnerHTML={{__html: renderMarkdown(detail.content)}}/>
+                                }
                                 <h6>{detail.createdAt} {detail.comments ? ('---'+ detail.comments.length + ' 评论'): undefined}</h6>
                                 <br/>
                                 <div>

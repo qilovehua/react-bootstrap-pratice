@@ -6,6 +6,7 @@ import {browserHistory} from 'react-router';
 import {renderMarkdown} from './../../common/utils';
 
 import topic from '../../api/topic';
+import user from '../../api/user';
 
 import {Well, Media, Label, Row, Col, Button, Glyphicon} from 'react-bootstrap';
 import {Link} from 'react-router';
@@ -15,6 +16,17 @@ var Cell = React.createClass({
     getDefaultProps(){
         return {
             fromList: true
+        }
+    },
+
+    authorDict: {},
+    componentWillMount(){
+        if(!this.props.fromList){
+            _.map(detail.comments, function (comment, index){
+                user.getUser({_id: comment.authorId}, (detail)=>{
+                    this.authorDict[comment.authorId] = detail.name;
+                })
+            });
         }
     },
 
@@ -29,7 +41,7 @@ var Cell = React.createClass({
         if(!this.props.fromList){
             var commentList = (
                 _.map(detail.comments, function (comment, index) {
-                    return <p key={index}>{index + ', '}{comment.content}</p>
+                    return <p key={index}>{index + ', '}{this.authorDict[comment.authorId] ? this.authorDict[comment.authorId] : comment.authorId + ' at ' + comment.createdAt + 'say: ' + comment.content}</p>
                 })
             );
         }

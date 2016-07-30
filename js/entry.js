@@ -9,6 +9,7 @@ import Login from './component/login';
 import TopicList from './component/topic/list';
 import TopicDetail from './component/topic/detail';
 import TopicNew from './component/topic/new';
+import Profile from './component/profile';
 
 // 配置路由，并将路由注入到id为react的DOM元素中
 ReactDOM.render((
@@ -19,6 +20,7 @@ ReactDOM.render((
             <Route path="/topic" component={TopicList}/>
             <Route path="/topic/item/:topicId" component={TopicDetail}/>
             <Route path="/topic/new(/:topicId)" component={TopicNew}/>
+            <Route path="/profile" component={Profile}/>
         </Route>
     </Router>
 ), document.getElementById('react'));

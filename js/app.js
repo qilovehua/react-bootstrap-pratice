@@ -105,6 +105,7 @@ const App = React.createClass({
                         {
                             this.state.token ? (
                                 <Nav pullRight>
+                                    <NavItem><Link to="/profile" style={{color: '#fff'}}><Glyphicon glyph="setting"/> 设置</Link></NavItem>
                                     <NavItem><Glyphicon glyph="user"/> {this.state.username}</NavItem>
                                     <NavItem eventKey={2} href="#" onClick={this.logout}>Logout</NavItem>
                                 </Nav>

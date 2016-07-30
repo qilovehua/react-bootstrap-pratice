@@ -8,3 +8,8 @@ exports.getUser = function(params, success, failed) {
     console.log('user detail', urlBase);
     fetchFromServer(`${urlBase}/user`, 'GET', params, success, failed);
 };
+
+exports.updateUser = function(params, success, failed) {
+    console.log('user detail', urlBase);
+    fetchFromServer(`${urlBase}/user`, 'POST', params, success, failed);
+};

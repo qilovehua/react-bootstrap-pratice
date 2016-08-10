@@ -17,26 +17,40 @@ const Profile = React.createClass({
         return {
             email: '',
             nickname: '',
-            about: ''
+            about: '',
+            github: ''
         }
     },
 
     componentWillMount(){
         var _id = cookie.load('id');
         user.getUser({_id}, (result)=>{
-            var {email, nickname, about} = result.user;
+            var {email, nickname, about, github} = result.user;
             this.setState({
                 email,
                 nickname,
-                about
+                about,
+                github
             });
+        });
+    },
+
+    unbind(){
+        var _id = cookie.load('id');
+        user.updateUser({_id, github: ''}, (result)=>{
+            alert('unbind success');
+            this.setState({
+                github: ''
+            });
+        }, ()=>{
+            alert(`fail: $(result)`);
         });
     },
 
     saveProfile(){
         var _id = cookie.load('id');
-        var {email, nickname, about} = this.state;
-        user.updateUser({_id, email, nickname, about}, (result)=>{
+        var {email, nickname, about, github} = this.state;
+        user.updateUser({_id, email, nickname, about, github}, (result)=>{
             alert('update success');
             this.goBack();
         }, ()=>{
@@ -83,6 +97,18 @@ const Profile = React.createClass({
                     </Col>
                     <Col md={5}>
                         <FormControl placeholder="about" value={this.state.about} onChange={(e)=>this.handleInput(e, 'about')}/>
+                    </Col>
+                </FormGroup>
+
+                <FormGroup controlId="formHorizontalAbout">
+                    <Col componentClass={ControlLabel} md={2} mdOffset={2}>
+                        Github
+                    </Col>
+                    <Col md={5}>
+                        <FormControl placeholder="Github account" value={this.state.github} onChange={(e)=>this.handleInput(e, 'github')}/>
+                    </Col>
+                    <Col md={1}>
+                        <Button bsStyle="primary" onClick={this.unbind}>解绑</Button>
                     </Col>
                 </FormGroup>
 

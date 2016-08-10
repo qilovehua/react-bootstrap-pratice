@@ -22,7 +22,7 @@ var Cell = React.createClass({
     authorDict: {},
     componentWillMount(){
         if(!this.props.fromList){
-            _.map(detail.comments, function (comment, index){
+            _.map(this.props.detail.comments, function (comment, index){
                 user.getUser({_id: comment.authorId}, (detail)=>{
                     this.authorDict[comment.authorId] = detail.name;
                 })

@@ -7,7 +7,7 @@ import {Nav, Navbar, NavItem, MenuItem, NavDropdown, Modal, Button, Form, FormGr
 
 import _ from 'lodash';
 
-import {login, logout} from './api/password';
+import {login, logout, loginGithub} from './api/password';
 import cookie from 'react-cookie';
 
 const App = React.createClass({
@@ -55,6 +55,14 @@ const App = React.createClass({
         }, (err)=> {
             console.log('error: ', err);
         })
+    },
+
+    loginByGithub(){
+        loginGithub((result)=>{
+            console.log('===', result);
+        }, ()=>{
+            alert('failed');
+        });
     },
 
     logout(){
@@ -164,6 +172,7 @@ const App = React.createClass({
                     </Modal.Body>
 
                     <Modal.Footer>
+                        <Button onClick={this.loginByGithub}>Gibhub登陆</Button>
                         <Button onClick={()=>{this.modalShow(false)}}>Cancel</Button>
                         <Button bsStyle="primary" onClick={this.login}>Login</Button>
                     </Modal.Footer>

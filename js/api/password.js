@@ -13,3 +13,7 @@ export function logout(params, success, failed) {
     console.log('logout', urlBase);
     fetchFromServer(`${urlBase}/logout`, 'POST', params, success, failed);
 };
+
+export function loginGithub(success, failed) {
+    fetchFromServer(`${urlBase}/auth/github`, 'GET', {}, success, failed);
+};

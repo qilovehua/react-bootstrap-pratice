@@ -20,8 +20,10 @@ function parseJSON(response) {
 export function fetchFromServer(url, method, params, success, failed) {
     console.log('method: ', method, 'url: ', url);
     var myRequest = {};
+    myRequest.url = url;
     if (method == 'POST' || method == 'DELETE'){
         myRequest = {
+            ...myRequest,
             method: method,
             headers: {
                 'Accept': 'application/json',
@@ -30,7 +32,6 @@ export function fetchFromServer(url, method, params, success, failed) {
             body: JSON.stringify(params)
         };
     }else{
-        myRequest.url = url;
         var query = [];
         var keys = _.keys(params);
         _.map(keys, function (key, index) {
@@ -40,11 +41,11 @@ export function fetchFromServer(url, method, params, success, failed) {
             myRequest.url += '?' + query.join('&');
         }
     }
+    console.log(myRequest.url);
     myRequest.mode = 'cors';
     myRequest.cache = 'default';
-    myRequest.redirect = 'follow';
     myRequest.credentials = 'include'; //跨域需要携带cookie
-    fetch(url, myRequest)
+    fetch(myRequest.url, myRequest)
         .then(checkStatus)
         .then(parseJSON)
         .then(function(result){

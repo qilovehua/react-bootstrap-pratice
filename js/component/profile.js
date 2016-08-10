@@ -2,9 +2,12 @@
 
 import React from 'react';
 import cookie from 'react-cookie';
-import {Link, History} from 'react-router'
+import {Link, History} from 'react-router';
 
 import user from '../api/user';
+
+import {Button, Form, FormGroup, FormControl, Col, ControlLabel} from 'react-bootstrap';
+
 
 const Profile = React.createClass({
 
@@ -19,9 +22,9 @@ const Profile = React.createClass({
     },
 
     componentWillMount(){
-        var _id = cookie.get('id');
+        var _id = cookie.load('id');
         user.getUser({_id}, (result)=>{
-            var {email, nickname, about} = result;
+            var {email, nickname, about} = result.user;
             this.setState({
                 email,
                 nickname,
@@ -31,7 +34,7 @@ const Profile = React.createClass({
     },
 
     saveProfile(){
-        var _id = cookie.get('id');
+        var _id = cookie.load('id');
         var {email, nickname, about} = this.state;
         user.updateUser({_id, email, nickname, about}, (result)=>{
             alert('update success');
@@ -55,7 +58,7 @@ const Profile = React.createClass({
         
         return (
             <Form horizontal style={{margin: '0 auto'}}>
-                <p>Update {this.state.username}'s profile</p>
+                <h3 style={{textAlign: 'center'}}>Update {this.state.username} profile</h3>
                 <FormGroup controlId="formHorizontalEmail">
                     <Col componentClass={ControlLabel} md={2} mdOffset={2}>
                         Email
@@ -84,10 +87,10 @@ const Profile = React.createClass({
                 </FormGroup>
 
                 <FormGroup>
-                    <Col smOffset={2} md={2}>
+                    <Col smOffset={4} md={1}>
                         <Button bsStyle="primary" onClick={this.saveProfile}> Save </Button>
                     </Col>
-                    <Col md={2}>
+                    <Col md={1}>
                         <Button  bsStyle="default" onClick={this.goBack}> Cancel </Button>
                     </Col>
                 </FormGroup>
